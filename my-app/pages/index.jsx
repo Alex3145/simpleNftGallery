@@ -7,19 +7,18 @@ const Home = () => {
   const[collection, setCollection] = useState("");
   const[NFTs, setNFTs] = useState([]);
   const[fetchForCollection, setFetchForCollection] = useState(false);
+
   const baseURL = `https://eth-mainnet.alchemyapi.io/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}/getNFTsForCollection/`;
 
   const fetchNFTs = async() => {
     let nfts; 
     console.log("fetching nfts");
+    const baseURL = `https://eth-mainnet.alchemyapi.io/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}/getNFTs/`;
     var requestOptions = {
         method: 'GET'
-      };
-     
+      }; 
     if (!collection.length) {
-    
       const fetchURL = `${baseURL}?owner=${wallet}`;
-  
       nfts = await fetch(fetchURL, requestOptions).then(data => data.json())
     } else {
       console.log("fetching nfts for collection owned by address")
@@ -28,7 +27,7 @@ const Home = () => {
     }
   
     if (nfts) {
-      console.log("nfts:", nfts)
+      console.log("nfts:", nfts.ownedNfts)
       setNFTs(nfts.ownedNfts)
     }
   }
@@ -38,12 +37,11 @@ const Home = () => {
       var requestOptions = {
         method: 'GET'
       };
-
       const fetchURL = `${baseURL}?contractAddress=${collection}&withMetadata=${"true"}`;
       const nfts = await fetch(fetchURL, requestOptions).then(data => data.json())
       if (nfts) {
         console.log("NFTs in collection:", nfts)
-        setNFTs(...nfts.nfts)
+        setNFTs(nfts.nfts)
       }
     }
   }
